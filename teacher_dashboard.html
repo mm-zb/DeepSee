@@ -1,0 +1,143 @@
+{% extends "base_teacher.html" %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+    <style>
+        .header-2 {
+            font-size: 2rem;
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(177, 18, 255, 0.2);
+        }
+
+        /* Container for leaderboard buttons */
+        .leaderboard-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .leaderboard-btn {
+            background: var(--new-gradient);
+            color: white;
+            font-size: 18px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 260px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hover effect */
+        .leaderboard-btn:hover {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Focused effect for accessibility */
+        .leaderboard-btn:focus {
+            outline: 3px solid #ffc107;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            margin: auto;
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal content (background and padding) */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 75%;
+            border-radius: 10px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* Modal fade-in effect */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .gradient-text {
+            background: var(--new-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: bold; 
+        }
+   
+    </style>
+
+    <h1 class="welcome-header">Welcome, {{ current_user.firstname }}!</h1>
+    <h2 class="header-2">This is your <span class="gradient-text">teacher dashboard</span></h2>
+   
+    <div class="leaderboard-buttons">
+        <button class="leaderboard-btn" onclick="showLeaderboard('total_points')">
+            Total Points Leaderboard
+        </button>
+        <button class="leaderboard-btn" onclick="showLeaderboard('attempts')">
+            Most Attempts Leaderboard
+        </button>
+        <button class="leaderboard-btn" onclick="showLeaderboard('game1')">
+            Game 1 Points Leaderboard
+        </button>
+        <button class="leaderboard-btn" onclick="showLeaderboard('game2')">
+            Game 2 Points Leaderboard
+        </button>
+        <button class="leaderboard-btn" onclick="showLeaderboard('game3')">
+            Game 3 Points Leaderboard
+        </button>
+    </div>
+
+    <div id="leaderboardModal" class="modal">
+        <div class="modal-content">
+            <span class="close"></span>
+            <div id="leaderboardContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function showLeaderboard(type) {
+            fetch(`/teacher/leaderboard/${type}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('leaderboardContent').innerHTML = html;
+                document.getElementById('leaderboardModal').style.display = 'block';
+            });
+        }
+
+        var modal = document.getElementById("leaderboardModal");
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+{% endblock %}

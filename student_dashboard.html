@@ -1,0 +1,21 @@
+{% extends "base_student.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+    <h1 class="welcome-header">Welcome, {{ user.firstname }}!</h1>
+    
+    <div class="game-grid">
+        <a href="/untimed-test" class="game-btn">
+            <i>🎮</i>
+            Practice makes Perfect
+        </a>
+        <a href="/timed-test" class="game-btn">
+            <i>🕹️</i>
+            Beat the Clock!
+        </a>
+        <a href="/match-game" class="game-btn">
+            <i>👾</i>
+            Fact or Fiction
+        </a>
+    </div>
+{% endblock %}
